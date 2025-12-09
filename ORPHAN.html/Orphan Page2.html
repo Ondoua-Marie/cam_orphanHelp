@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Orphan Page</title>
+
+    <style>
+        /* ---------------- GLOBAL STYLE ---------------- */
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+
+            /* USE LOGO AS BACKGROUND */
+            background: 
+                linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),
+                url("logo.png") center/contain no-repeat fixed;
+
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        /* ---------------- CARD CONTAINER ---------------- */
+        .container {
+            background: rgba(255, 255, 255, 0.13);
+            backdrop-filter: blur(14px);
+            padding: 40px;
+            border-radius: 18px;
+            width: 90%;
+            max-width: 750px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ---------------- HEADINGS ---------------- */
+        h1 {
+            color: red;
+            margin-bottom: 10px;
+            font-size: 2.3rem;
+            text-align: center;
+        }
+
+        h2, h3, h4, h5, h6 {
+            color: #5bd4ff;
+            margin-top: 30px;
+            font-weight: bold;
+        }
+
+        p {
+            line-height: 1.7;
+            margin-bottom: 15px;
+            color: black;
+            font-size: 1.05rem;
+        }
+
+        /* ---------------- WARNING BOX ---------------- */
+        .warning-box {
+            background-color: rgba(255, 120, 120, 0.28);
+            border: 1px solid rgba(255, 120, 120, 0.6);
+            padding: 15px;
+            margin-top: 25px;
+            border-radius: 8px;
+            color: #ffe6e6;
+        }
+
+        a {
+            color: #4de0ff;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Welcome to the Orphan Page</h1>
+        <p>This page presents a brief history of the orphanage and its statistics.<br>
+           It also highlights the different needs of the children.</p>
+
+        <h2>History of the Orphanage</h2>
+        <p>Le Centre d'Accueil Eau Vive pour le Bien-être Humain a pour principales missions :</p>
+        <p>• Promouvoir et réaliser les œuvres sociales et humanitaires en faveur des orphelins.</p>
+          <p>• Créer des structures d’accueil pour les groupes défavorisés.</p>
+        <p>• Favoriser leur insertion sociale grâce à l’éducation, l’agriculture et l’entrepreneuriat.</p>
+        <p>• Encadrer les personnes du troisième âge.</p>
+
+        <h3>Statistics About the Children</h3>
+        <p>Le centre accueille actuellement <strong>82 enfants</strong>, dont <strong>60</strong> en interne :</p>
+
+        <p>
+        • 53 enfants régulièrement scolarisés<br>
+        • 7 enfants non encore en âge scolaire<br>
+        • 1 enfant sourd-muet scolarisé<br>
+        • 1 nouveau-né abandonné<br>
+        • 3 jeunes filles responsables de la cuisine
+        </p>
+
+        <p>Nous mettons un accent particulier sur l’éducation et le bien-être spirituel.</p>
+
+        <h3>Children's Needs</h3>
+
+        <h3>Besoins alimentaires</h3>
+        <p>Riz, haricots, huile, lait, conserves, viande, poisson, etc.</p>
+
+        <h3>Besoins sanitaires & hygiéniques</h3>
+        <p>Savon, dentifrice, brosses à dents, couches, médicaments, etc.</p>
+
+        <h3>Besoins scolaires</h3>
+        <p>Cahiers, stylos, livres, tenues et chaussures scolaires, cartables, craies.</p>
+
+        <h3>Besoins vestimentaires</h3>
+        <p>Vêtements, chaussures, draps, couvertures, moustiquaires.</p>
+
+        <h3>Besoins ludiques</h3>
+        <p>Jouets, jeux de société, matériel de dessin et peinture, instruments de musique.</p>
+
+        <h3>Autres besoins</h3>
+        <p>Matériel de cuisine, ustensiles, mobilier, équipements informatiques.</p>
+
+        <h3>Contact</h3>
+        <p>
+            <strong>Téléphone :</strong><br>
+            +237 6 55 02 98 67<br>
+            +33 6 14 59 75 93
+        </p>
+
+        <div class="warning-box">
+            <strong>Note :</strong> Use the browser's Back button or visit the 
+            <a href="/">homepage</a>.
+        </div>
+
+    </div>
+
+</body>
+</html>
