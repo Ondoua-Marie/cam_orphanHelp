@@ -1,4 +1,3 @@
-
 * {
     margin: 0;
     padding: 0;
@@ -6,105 +5,101 @@
     font-family: "Poppins", sans-serif;
 }
 
+/* Background (beige like the signup page) */
 body {
     display: flex;
     justify-content: center;
-    align-items :center;
-    min-height: 100vh;
-    background: wheat;
+    align-items: center;
+    height: 100vh;
+    background: #f2e6d9;
 }
 
+/* Login box */
 .wrapper {
-    width: 420px;
-    background: #ece8e8;
-    color: wheat;
-    border-radius: 10px;
-    padding: 30px 40px;
+    width: 400px;
+    background: #fff;
+    padding: 35px 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
+/* Title */
 .wrapper h1 {
-    font-size: 36px;
-    text-align:center;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 30px;
+    color: #8c6d4e;
 }
 
-.wrapper .input-box {
-    position:relative;
-    width: 100%;
-    height: 50px;
-    margin: 30px 0;
+/* Input box container */
+.input-box {
+    position: relative;
+    margin: 15px 0;
 }
+
+/* Inputs */
 .input-box input {
     width: 100%;
-    height: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    border: 2px solid rgba(24, 24, 24, 0.2);
-    border-radius: 40px;
-    font-size: 16px;
-    color:rgb(0, 0, 0);
-    padding: 20px 45px 20px 20px;
+    height: 50px;
+    border: 1px solid #c8a98d;
+    border-radius: 8px;
+    padding: 10px 40px 10px 15px;
+    font-size: 15px;
 }
 
-.input-box input::placeholder {
-    color:rgb(0, 0, 0);
-}
-
-.input-box i {
+/* Icons inside inputs */
+.input-box .icon {
     position: absolute;
-    right:20px;
-    top:50%;
+    right: 15px;
+    top: 50%;
     transform: translateY(-50%);
-    font-size: 20px;
+    color: #7b5a4a;
+    font-size: 18px;
 }
-.wrapper .remember-forgot {
+
+/* Remember me + Forgot Password */
+.extra {
     display: flex;
     justify-content: space-between;
-    font-size: 14.5px;
-    margin: -15px 0 15px;
-}
-.remember-forgot label input {
-    accent-color:rgb(255, 255, 255);
-    margin-right: 3px;
+    font-size: 14px;
+    margin: 10px 0 20px;
 }
 
-.remember-forgot a {
-    color:rgb(11, 11, 11);
-    text-align: none;
+.extra a {
+    color: #7b5a4a;
+    text-decoration: none;
 }
 
-        .remember-forgot a:hover {
-            text-decoration: underline;
-        }
+/* Login button (brown color from picture) */
+.btn {
+    width: 100%;
+    height: 50px;
+    background: #8c6d4e;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
 
-        .wrapper .btn{
-            width: 100%;
-            height: 45px;
-            background:white;
-            border: none;
-            outline: none;
-            border-radius: 40px;
-            box-shadow: 0 0 10px rgba(0, o, o, .1);
-            cursor: pointer;
-            font-size: 16px;
-            color: black;
-            font-weight:600;
-        }
-        .wrapper .register-link {
-            font-size: 14.5px;
-            text-align: center;
-            margin-top: 20px;
-        }
+.btn:hover {
+    opacity: 0.9;
+    background-color: #6f543a;
+}
 
-        .register-link p a {
-            color: black;
-            text-align: none;
-            font-weight: 600;
-        }
+/* signup link */
+.signup-text {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color:#5f4630
+}
 
-        .register-link p a:hover {
-            text-decoration: underline;
-        }
-    
-
-
+.signup-text a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #8c6d4e;
+}
+.signup-text a:hover {
+    text-decoration: underline;
+}
