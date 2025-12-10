@@ -1,3 +1,5 @@
+
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f2e6d9; /* pale brown background */
@@ -12,7 +14,7 @@ body {
     background-color: #fff;
     padding: 30px 40px;
     border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     width: 350px;
     text-align: center;
 }
@@ -35,6 +37,7 @@ input:focus {
     border-color: #8c6d4e;
     outline: none;
 }
+
 
 button {
     background-color: #8c6d4e;
