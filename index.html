@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cameroon Orphan Help — Home</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- NAV -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <img src="assets/logo.jpg" alt="Cameroon Orphan Help logo" class="logo" />
+        <div class="brand-text">
+          <div class="site-title">Cameroon Orphan Help</div>
+          <div class="site-sub">Find & support verified orphanages</div>
+        </div>
+      </div>
+
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="#">Orphanages</a>
+        <a href="#">About Us</a>
+        <a href="js:void(0)" class="login-link">Login</a>
+        <a href="js:void(0)" class="signup-link">Sign Up</a>
+        <a href="#" id="nav-donate"><strong>Donate</strong></a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <h1>Help Connect Donors to Real Orphanages</h1>
+        <p>Find orphanages near you and send gifts with complete transparency</p>
+
+        <div class="hero-actions-row">
+          <a href="#" class="btn btn-skyblue">Browse Orphanages</a>
+        </div>
+      </div>
+
+      <div class="hero-image-col">
+        <a id="donate-cta" class="btn btn-donate" href="#">
+            <h2>Donate Now</h2>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features container">
+    <div class="feature">
+      <h3>Verified Orphanages</h3>
+      <p>Only registered, checked organizations appear on this site</p>
+    </div>
+    <div class="feature">
+      <h3>Easy Donations</h3>
+      <p>Donate through Mobile Money (MOMO) or Orange Money</p>
+    </div>
+    <div class="feature">
+      <h3>Transparent</h3>
+      <p>Each orphanage profile shows contact and recent activity</p>
+    </div>
+  </section>
+
+  <!-- FEATURED ORPHANAGES -->
+  <section class="orphanage-list container">
+    <h2>Featured orphanages</h2>
+    <div class="cards">
+      <article class="card">
+        <img src="assets/orp1.jpeg" alt="Orphanage Smile" />
+        <div class="card-body">
+          <h3>Centre d'Accueil Eau Vive pour le Bien-être Humain</h3>
+          <p class="location">Yaoundé, Cameroon</p>
+          <p class="desc">A certified institution caring for children and offering education</p>
+          <div class="card-actions">
+            <button class="btn small view-profile" data-name="Hope Home">View profile</button>
+            <button class="btn small donate" data-name="Hope Home">Donate</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Cameroon Orphan Help — Helping children together</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
