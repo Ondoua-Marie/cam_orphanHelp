@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard</title>
+
+<!-- ICONS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+ <link rel="stylesheet " href="Admin.css">
+</head>
+<body>
+
+<!-- HAMBURGER BUTTON FOR MOBILE -->
+<i class="fa fa-bars hamburger" onclick="toggleSidebar()"></i>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <div>
+        <div class="logo-container">
+            <div class="logo-bg">
+                <img src="camlev.png" alt="website logo" class="logo">
+            </div>
+            <span class="logo-text">Admin</span>
+        </div>
+
+        <a href="#" class="active" onclick="setActive(this)"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+        <a href="#" onclick="setActive(this)"><i class="fa-solid fa-gift"></i> Donations</a>
+        <a href="#" onclick="setActive(this)"><i class="fa-solid fa-users"></i> Donors</a>
+        <a href="#" onclick="setActive(this)"><i class="fa-solid fa-children"></i> Orphanage</a>
+        <a href="#" onclick="setActive(this)"><i class="fa-solid fa-gear"></i> Settings</a>
+    </div>
+    <a href="#" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+    <h1>Welcome Admin</h1>
+
+    <div class="cards">
+        <div class="card">
+            <i class="fa-solid fa-money-bill-wave"></i>
+            <h3>Total Amount Donated</h3>
+            <p>0XFA</p>
+        </div>
+
+        <div class="card">
+            <i class="fa-solid fa-boxes-stacked"></i>
+            <h3>Total Items Donated</h3>
+            <p>0</p>
+        </div>
+
+        <div class="card">
+            <i class="fa fa-university"></i>
+            <h3>Orphanages</h3>
+            <p>3</p>
+        </div>
+
+        <div class="card">
+            <i class="fa fa-clock"></i>
+            <h3>Pending Donations</h3>
+            <p>0</p>
+        </div>
+
+        <div class="card">
+            <i class="fa fa-users"></i>
+            <h3>Registered Donors</h3>
+            <p>0</p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Dynamic Active Sidebar
+function setActive(el) {
+    const links = document.querySelectorAll('.sidebar a');
+    links.forEach(link => link.classList.remove('active'));
+    el.classList.add('active');
+}
+
+// Hamburger toggle for mobile only
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('show');
+}
+</script>
+</body>
+</html>
