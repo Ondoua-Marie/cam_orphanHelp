@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="stylesign.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+</head>
+<body>
+    <div class="container">
+        <h2>Create Account</h2>
+        <form id="signupForm">
+
+            <input type="text" id="name" placeholder="Full Name" required><br><br>
+
+            <input type="email" id="email" placeholder="Email" required><br><br>
+
+            <div class="password-box">
+                <input type="password" id="password" placeholder="Password" required>
+                <span class="eye"><i id="eye1" class="fa-solid fa-eye-slash" onclick="togglePassword()"></i></span>
+            </div><br><br>
+
+            <div class="password-box">
+                <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                <span class="eye"><i id="eye2" class="fa-solid fa-eye-slash" onclick="toggleConfirm()"></i></span>
+            </div><br>
+
+            <button type="submit">Sign Up</button><br><br>
+
+            <p class="login-text">
+                Already have an account?  
+                <a href="login.html">Log In </a>
+            </p>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('signupForm');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return;
+            }
+
+            alert(`Account created successfully!\nName: ${name}\nEmail: ${email}`);
+            form.reset();
+            hideEyes();
+        });
+
+        const passwordInput = document.getElementById("password");
+        const confirmInput = document.getElementById("confirmPassword");
+        const eye1 = document.getElementById("eye1");
+        const eye2 = document.getElementById("eye2");
+
+        // Show eye only when typing
+        passwordInput.addEventListener("input", () => {
+            eye1.parentElement.style.display = passwordInput.value.length > 0 ? "inline-block" : "none";
+        });
+
+        confirmInput.addEventListener("input", () => {
+            eye2.parentElement.style.display = confirmInput.value.length > 0 ? "inline-block" : "none";
+        });
+
+        function hideEyes(){
+            eye1.parentElement.style.display = "none";
+            eye2.parentElement.style.display = "none";
+            passwordInput.type = "password";
+            confirmInput.type = "password";
+            eye1.classList.remove("fa-eye");
+            eye1.classList.add("fa-eye-slash");
+            eye2.classList.remove("fa-eye");
+            eye2.classList.add("fa-eye-slash");
+        }
+
+        function togglePassword(){
+            const p = document.getElementById("password");
+            const eye = document.getElementById("eye1");
+
+            if(p.type === "password"){
+                p.type = "text";
+                eye.classList.remove("fa-eye-slash");
+                eye.classList.add("fa-eye");
+            } else {
+                p.type = "password";
+                eye.classList.remove("fa-eye");
+                eye.classList.add("fa-eye-slash");
+            }
+        }
+
+        function toggleConfirm(){
+            const p = document.getElementById("confirmPassword");
+            const eye = document.getElementById("eye2");
+
+            if(p.type === "password"){
+                p.type = "text";
+                eye.classList.remove("fa-eye-slash");
+                eye.classList.add("fa-eye");
+            } else {
+                p.type = "password";
+                eye.classList.remove("fa-eye");
+                eye.classList.add("fa-eye-slash");
+            }
+        }
+
+        // Hide eyes on page load
+        hideEyes();
+    </script>
+</body>
+</html>
