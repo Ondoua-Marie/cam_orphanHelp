@@ -194,3 +194,29 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
+
+/* Phone number line */
+.phone {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-top: 8px;
+}
+
+/* Small phone icon beside number */
+.phone-icon {
+    width: 18px !important;
+    height: 18px !important;
+    margin-right: 4px;
+    opacity: 0.9;
+}
+
+.phone a {
+    color: var(--dark);
+    text-decoration: none;
+}
+.phone a:hover {
+    color: var(--brownred);
+}
