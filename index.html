@@ -23,7 +23,8 @@
         <a href="orphanpage.html">Orphanages</a>
         <a href="about.html">About Us</a>
         <a href="login.html" class="login-link">Login</a>
-        <a href="Donation.html" id="nav-donate"><strong>Donate</strong></a>
+        <a href="dashboard.html" id="nav-dashboard">Dashboard</a>
+        <a href="login.html" id="nav-donate"><strong>Donate</strong></a>
       </nav>
     </div>
   </header>
@@ -120,5 +121,22 @@
   </footer>
 
   <script src="script.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const isLoggedIn = localStorage.getItem("loggedIn");
+    const loginLink = document.getElementById("nav-login");
+    const dashboardLink = document.getElementById("nav-dashboard");
+
+    if (isLoggedIn) {
+        loginLink.style.display = "none";
+        dashboardLink.style.display = "inline-block";
+    } else {
+        dashboardLink.style.display = "none";
+        loginLink.style.display = "inline-block";
+    }
+});
+</script>
+
 </body>
 </html>
