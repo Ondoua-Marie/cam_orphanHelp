@@ -20,10 +20,11 @@
 
       <nav class="main-nav">
         <a href="index.html">Home</a>
-        <a href="#">Orphanages</a>
+        <a href="orphanpage.html">Orphanages</a>
         <a href="about.html">About Us</a>
-        <a href="js:void(0)" class="login-link">Login</a>
-        <a href="#" id="nav-donate"><strong>Donate</strong></a>
+        <a href="login.html" class="login-link">Login</a>
+        <a href="dashboard.html" id="nav-dashboard">Dashboard</a>
+        <a href="Donation.html" id="nav-donate"><strong>Donate</strong></a>
       </nav>
     </div>
   </header>
@@ -103,6 +104,10 @@
             <img src="assets/marie.jpg" alt="Team member">
             <h4>Guitang Ondoua Marie</h4>
             <p class="role">Scrum Master</p>
+            <p class="team-phone">
+                <span class="phone-icon">📞</span>
+                <a href="tel:+237676196377">+237676196377</a>
+            </p>
             <blockquote>
                 “When purpose guides our actions, even small efforts can change lives.”
             </blockquote>
@@ -112,6 +117,10 @@
             <img src="assets/aude.jpg" alt="Team member">
             <h4>Akono Essogo Aude Alida</h4>
             <p class="role">Product Owner</p>
+            <p class="team-phone">
+                <span class="phone-icon">📞</span>
+                <a href="tel:+237699593087">+237699593087</a>
+            </p>
             <blockquote>
                 “When technology meets kindness, every orphan feels supported and has a chance to thrive”
             </blockquote>
@@ -121,6 +130,10 @@
             <img src="assets/yves.jpg" alt="Team member">
             <h4>Mekoulou Eloundou Yves Ornelie</h4>
             <p class="role">Chief Financial Officer CFO</p>
+            <p class="team-phone">
+                <span class="phone-icon">📞</span>
+                <a href="tel:+237683173359">+237683173359</a>
+            </p>
             <blockquote>
                 “Technology, when used with purpose, can improve lives and strengthen communities.”
             </blockquote>
@@ -130,6 +143,10 @@
             <img src="assets/priso.jpg" alt="Team member">
             <h4>Njoh Priso</h4>
             <p class="role">UI Designer</p>
+            <p class="team-phone">
+                <span class="phone-icon">📞</span>
+                <a href="tel:+237654802910">+237654802910</a>
+            </p>
             <blockquote>
                 “Be patient with the process, and brave with the pain.”
             </blockquote>
@@ -139,6 +156,10 @@
             <img src="assets/rose.jpg" alt="Team member">
             <h4>Imouk Njoh Rosaline</h4>
             <p class="role">Front-end Designer</p>
+            <p class="team-phone">
+                <span class="phone-icon">📞</span>
+                <a href="tel:+237694024188">+237694024188</a>
+            </p>
             <blockquote>
                 “Technology is a bridge between ideas and solutions.”
             </blockquote>
@@ -148,6 +169,10 @@
             <img src="assets/charles.jpg" alt="Team member">
             <h4>Kankeu Tene Charles Junior</h4>
             <p class="role"> Chief Technology Officer CTO</p>
+            <p class="team-phone">
+                <span class="phone-icon">📞</span>
+                <a href="tel:+237695735637">+237695735637</a>
+            </p>
             <blockquote>
                 “Connecting compassion with innovation, we bridge the gap between generosity and need.”
             </blockquote>
@@ -161,5 +186,22 @@
 </footer>
 
 <script src="about.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const isLoggedIn = localStorage.getItem("loggedIn");
+    const loginLink = document.getElementById("nav-login");
+    const dashboardLink = document.getElementById("nav-dashboard");
+
+    if (isLoggedIn) {
+        loginLink.style.display = "none";
+        dashboardLink.style.display = "inline-block";
+    } else {
+        dashboardLink.style.display = "none";
+        loginLink.style.display = "inline-block";
+    }
+});
+</script>
+
 </body>
 </html>
