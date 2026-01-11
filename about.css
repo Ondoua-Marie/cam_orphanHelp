@@ -198,3 +198,28 @@ footer {
         width: 100%;
     }
 }
+
+/* ===== TEAM PHONE ===== */
+.team-phone {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    color: var(--dark);
+}
+
+.team-phone a {
+    text-decoration: none;
+    color: var(--dark);
+}
+
+.team-phone a:hover {
+    color: var(--brownred);
+}
+
+.phone-icon {
+    font-size: 0.9rem;
+}
