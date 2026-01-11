@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Cameroon Orphan Help — Home</title>
-  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="user_dashboard.css" />
 </head>
 <body>
 
@@ -13,13 +13,12 @@
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <nav>
-            <a href="#" class="active">My Dashboard</a>
+            <a href="user_dashboard.html" class="active">My Dashboard</a>
             <a href="index.html" class="menu-link">Home</a>
             <a href="#" class="menu-link">My Profile</a>
-            <a href="#" class="menu-link">Orphanages</a>
-            <a href="#" class="menu-link">My Donations</a>
+            <a href="orphanpage.html" class="menu-link">Orphanages</a>
 
-            <a href="#" class="donate-btn">Donate</a>
+            <a href="Donation.html" class="donate-btn">Donate</a>
 
     <!-- logout has its own class so it can be styled separately -->
             <a href="#" class="logout-link menu-link">Logout</a>
@@ -72,7 +71,7 @@
 
         <!-- DONATION HISTORY -->
         <section class="table-section">
-            <h2>Recent Donations</h2>
+            <h2>Your Donations</h2>
 
             <table>
                 <thead>
@@ -108,5 +107,13 @@
 </div>
 
 <script src="dashboard.js"></script>
+
+<script>
+document.getElementById("logout-btn").onclick = function() {
+    localStorage.removeItem("loggedIn");
+    window.location.href = "index.html";
+};
+</script>
+
 </body>
 </html>
