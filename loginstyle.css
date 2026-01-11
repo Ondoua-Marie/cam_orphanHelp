@@ -1,0 +1,105 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+/* Background (beige like the signup page) */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f2e6d9;
+}
+
+/* Login box */
+.wrapper {
+    width: 400px;
+    background: #fff;
+    padding: 35px 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Title */
+.wrapper h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 30px;
+    color: #8c6d4e;
+}
+
+/* Input box container */
+.input-box {
+    position: relative;
+    margin: 14px 0;
+}
+
+/* Inputs */
+.input-box input {
+    width: 100%;
+    height: 50px;
+    border: 1px solid #c8a98d;
+    border-radius: 8px;
+    padding: 10px 40px 10px 15px;
+    font-size: 15px;
+}
+
+/* Icons inside inputs */
+.input-box .icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #7b5a4a;
+    font-size: 18px;
+}
+
+/* Remember me + Forgot Password */
+.extra {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin: 10px 0 20px;
+}
+
+.extra a {
+    color: #7b5a4a;
+    text-decoration: none;
+}
+
+/* Login button (brown color from picture) */
+.btn {
+    width: 100%;
+    height: 50px;
+    background: #8c6d4e;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    opacity: 0.9;
+    background-color: #6f543a;
+}
+
+/* signup link */
+.signup-text {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color:#5f4630;
+}
+
+.signup-text a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #8c6d4e;
+}
+.signup-text a:hover {
+    text-decoration: underline;
+}
