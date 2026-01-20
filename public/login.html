@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<link rel="stylesheet" href="stylelog.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<div class="wrapper">
+
+<h3>Login</h3>
+
+<div class="input-box">
+<input type="email" placeholder="Email" required>
+<i class="fa-solid fa-user icon"></i>
+</div>
+
+<div class="input-box">
+<input type="password" placeholder="Password" required>
+<i class="fa-solid fa-lock icon"></i>
+</div>
+
+<div class="extra">
+<label><input type="checkbox"> Remember me</label>
+<a href="#"><span class="forget">Forgot Password?</span></a>
+</div>
+
+<button class="btn">Login</button>
+<p id="message" style="color:red;"></p>
+
+<p class="signup-text">Don't have an account?
+<a href="signup.html">Sign Up</a>
+</p>
+</div>
+
+<script>
+const btn = document.querySelector(".btn");
+const message = document.getElementById("message");
+
+btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    const email = document.querySelector("input[type='email']").value;
+    const password = document.querySelector("input[type='password']").value;
+
+    try {
+        const res = await fetch("/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json(); // parse JSON response
+        message.textContent = data.message; // show server message
+
+        // empty fields on successful login
+        if (res.ok) {
+            document.querySelector("input[type='email']").value = "";
+            document.querySelector("input[type='password']").value = "";
+        }
+
+        if (data.redirect) {
+
+            // Clear previous message
+            message.textContent = "";
+
+            // ✅ Save admin or user in localStorage
+            if (data.adminName) {
+                localStorage.setItem("adminName", data.adminName);
+                localStorage.setItem("userEmail", email); // also store email
+            } 
+            if (data.userName) {
+                localStorage.setItem("userName", data.userName);
+                localStorage.setItem("userEmail", email); // also store email
+            }
+
+            // ✅ Save JWT token
+            if (data.token) {
+                localStorage.setItem("token", data.token);
+            }
+
+            // Redirect to the proper dashboard
+            setTimeout(() => {
+                window.location.href = data.redirect;
+            }, 500);
+        }
+
+    } catch (err) {
+        message.textContent = "Server error. Please try again.";
+        console.error(err);
+    }
+});
+</script>
+
+</body>
+</html>
+

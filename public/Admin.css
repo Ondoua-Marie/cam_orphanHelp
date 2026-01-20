@@ -1,0 +1,463 @@
+:root {
+    --primary-brown: #A0522D;
+    --card-bg: #cfb9a3; /* soft brown */
+    --text-dark: #333;
+    --white: #fff;
+    --sidebar-width: 250px;
+    --hover-bg: rgba(160, 82, 45, 0.3);
+    --active-bg: rgba(160, 82, 45, 0.2);
+    --click-bg: rgba(160, 82, 45, 0.5);
+}
+
+/* RESET */
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    background-color:white;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: var(--sidebar-width);
+    background: rgba(153,153,153,0.6);
+    height: 100vh;
+    padding: 20px;
+    position: fixed;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 5px 0;
+    margin-bottom: 15px;
+}
+
+.logo-bg {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.logo-bg img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    background-color: transparent;
+}
+
+.logo-text {
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--primary-brown);
+}
+
+/* SIDEBAR LINKS */
+.sidebar a {
+    display: flex;
+    align-items: center;
+    position: relative;
+    color: var(--text-dark);
+    text-decoration: none;
+    margin: 12px 0;
+    font-size: 17px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.sidebar a i {
+    margin-right: 10px;
+    color: var(--primary-brown);
+}
+
+/* Active indicator */
+.sidebar a.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    background: var(--primary-brown);
+    border-radius: 5px 0 0 5px;
+}
+
+/* Active and hover states */
+.sidebar a.active {
+    background-color: var(--active-bg);
+    color: var(--primary-brown);
+}
+.sidebar a:hover {
+    background-color: var(--hover-bg);
+    color: var(--primary-brown);
+}
+.sidebar a:active {
+    background-color: var(--click-bg);
+}
+
+/* Logout */
+.logout { font-weight: bold; margin-top: auto; }
+
+/* MAIN CONTENT */
+.main {
+    margin-left: var(--sidebar-width);
+    padding: 20px;
+    flex: 1;
+}
+
+.main h1 {
+    margin-bottom: 20px;
+    color: var(--primary-brown);
+}
+
+/* CARDS */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    padding: 20px;
+    background: var(--card-bg);
+    color: var(--text-dark);
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.card i {
+    font-size: 35px;
+    color: var(--primary-brown);
+    margin-bottom: 20px;
+}
+
+.card h3 { margin: 10px 0 5px; }
+.card p { font-size: 22px; font-weight: bold; }
+
+/* Card hover effect */
+.card:hover { transform: rotateY(10deg) scale(1.05); }
+
+@media (max-width: 900px) {
+    .card:hover { transform: scale(1.03); }
+}
+
+/* =================== SETTINGS PANEL =================== */
+#settings {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 12px;
+    max-width: 480px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+}
+
+#settings h2 {
+    color: var(--primary-brown);
+    margin-bottom: 15px;
+}
+
+#changePasswordForm {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#changePasswordForm input {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--primary-brown);
+    background: #fff;
+    font-size: 15px;
+}
+
+#changePasswordForm button {
+    margin-top: 5px;
+    padding: 10px;
+    border-radius: 8px;
+    background: var(--primary-brown);
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+#changePasswordForm button:hover {
+    background: #8b3e1d;
+    transform: scale(1.03);
+}
+
+#passwordMsg {
+    margin-top: 10px;
+    font-weight: bold;
+    color: green;
+}
+
+
+/* =================== DONATION STATUS DROPDOWN =================== */
+#donationsTable select {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--primary-brown);
+    background: #fff4e6;
+    color: var(--primary-brown);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#donationsTable select:hover {
+    background: #ffe4c4;
+}
+
+
+/* =================== RELAY FORM POLISH =================== */
+/* ================= RELAY POINTS SECTION ================= */
+#relayPointsSection {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    max-width: 100%;
+}
+
+#relayPointsSection h2 {
+    color: var(--primary-brown);
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+/* ================= TABLE STYLING ================= */
+#relayTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 15px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+#relayTable th {
+    background: var(--primary-brown);
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+#relayTable td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+#relayTable tr:nth-child(even) {
+    background: rgba(160,82,45,0.08);
+}
+
+#relayTable tr:hover {
+    background: rgba(160,82,45,0.18);
+}
+
+/* ================= ADD RELAY FORM ================= */
+#addRelayForm {
+    background: rgba(255,255,255,0.7);
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#addRelayForm input {
+    flex: 1;
+    min-width: 160px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid var(--primary-brown);
+    font-size: 14px;
+}
+
+#addRelayForm button {
+    background: var(--primary-brown);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+#addRelayForm button:hover {
+    background: #8b3e1d;
+    transform: scale(1.05);
+}
+
+/* ================= DELETE BUTTON ================= */
+#relayTable button {
+    background: #b22222;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#relayTable button:hover {
+    background: #8b0000;
+}
+
+
+
+/* ================= DONATIONS SECTION ================= */
+#donations {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+#donations h2 {
+    color: var(--primary-brown);
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+/* ================= DONATIONS TABLE ================= */
+#donationsTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#donationsTable th {
+    background: var(--primary-brown);
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+#donationsTable td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+#donationsTable tr:nth-child(even) {
+    background: rgba(160,82,45,0.08);
+}
+
+#donationsTable tr:hover {
+    background: rgba(160,82,45,0.18);
+}
+
+/* ================= STATUS DROPDOWN ================= */
+#donationsTable select {
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid var(--primary-brown);
+    background: white;
+    cursor: pointer;
+}
+
+/* ================= ACTION BUTTON ================= */
+#donationsTable button {
+    background: #b22222;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* ================= DONATIONS TABLE ================= */
+
+#donationsTable button:hover {
+    background: #8b0000;
+}
+
+#donors {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+#donors h2 {
+    color: var(--primary-brown);
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+#donorsTable {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 15px;
+}
+
+#donorsTable th {
+    background: var(--primary-brown);
+    color: white;
+    padding: 10px;
+}
+
+#donorsTable td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+#donorsTable tr:nth-child(even) {
+    background: rgba(160,82,45,0.08);
+}
+
+#donorsTable tr:hover {
+    background: rgba(160,82,45,0.18);
+}
+
+/* HAMBURGER */
+.hamburger {
+    display: none;
+    font-size: 28px;
+    cursor: pointer;
+    margin: 10px;
+    color: var(--primary-brown);
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 900px) {
+    .hamburger { display: block; position: fixed; top: 15px; left: 15px; z-index: 1001; }
+    .sidebar {
+        width: 200px;
+        transform: translateX(-100%);
+        z-index: 1000;
+    }
+    .sidebar.show { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .cards { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+    .cards { grid-template-columns: 1fr; }
+}
+
+

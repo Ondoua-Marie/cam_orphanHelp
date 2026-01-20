@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Donations</title>
+<link rel="stylesheet" href="User.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <nav>
+      <a href="UserD.html">My Dashboard</a>
+      <a href="index.html">Home</a>
+      <a href="profile.html">My Profile</a>
+      <a href="#">Orphanages</a>
+      <a href="mydonations.html" class="active">My Donations</a>
+      <a href="donationF.html" class="donate-btn">Donate</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HEADER -->
+    <header class="topbar">
+      <h1>My Donations</h1>
+      <div class="user-info">
+        <img src="Serge.png" class="user-avatar">
+        <div id="profileInfo">
+          <span id="userNameLabel"></span><br>
+          <small class="verified">Verified</small>
+        </div>
+      </div>
+    </header>
+
+    <!-- DONATIONS TABLE -->
+    <section class="table-section">
+      <h2>Your Donations</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Orphanage</th>
+            <th>Donation Type</th>
+            <th>Details</th>
+            <th>Status</th>
+            <th>Proof</th>
+          </tr>
+        </thead>
+        <tbody id="donationTableBody">
+          <!-- Donations will load here -->
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const userName = localStorage.getItem("userName");
+const userEmail = localStorage.getItem("userEmail");
+
+if(!userEmail){
+  alert("Please login first");
+  location.href="/login";
+}
+
+document.getElementById("userNameLabel").innerText = userName;
+
+function logout(){
+  localStorage.clear();
+  location.href="/";
+}
+
+async function loadMyDonations(){
+  try {
+    const res = await fetch(`/api/my-donations/${userEmail}`);
+    const donations = await res.json();
+
+    const tbody = document.getElementById("donationTableBody");
+    tbody.innerHTML = "";
+
+    donations.forEach(d => {
+      tbody.innerHTML += `
+        <tr>
+          <td>${new Date(d.donationDate).toLocaleDateString()}</td>
+          <td>${d.orphanage}</td>
+          <td>${d.donationType === "money" ? d.paymentMethod : "Physical Donation"}</td>
+          <td>${d.donationType === "money" ? d.amount + " FCFA" : d.description || "-"}</td>
+          <td class="${d.donationStatus}">${d.donationStatus}</td>
+          <td>
+            ${d.proofPath ? `<a href="${d.proofPath}" target="_blank">View</a>` :
+              (d.donationStatus === "pending" ? `<button onclick="uploadProof(${d.id})">Upload</button>` : "-")}
+          </td>
+        </tr>
+      `;
+    });
+  } catch(err){
+    console.error("Error loading donations:", err);
+  }
+}
+
+function uploadProof(id){
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+
+  input.onchange = async () => {
+    const form = new FormData();
+    form.append("proof", input.files[0]);
+
+    await fetch(`/api/upload-proof/${id}`, {method:"POST", body: form});
+    alert("Proof uploaded");
+    loadMyDonations();
+  };
+
+  input.click();
+}
+
+loadMyDonations();
+</script>
+
+</body>
+</html>
+

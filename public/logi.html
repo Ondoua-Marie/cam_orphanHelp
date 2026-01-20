@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<link rel="stylesheet" href="stylelog.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<div class="wrapper">
+<h3>Login</h3>
+
+<div class="input-box">
+<input type="email" placeholder="Email" required>
+<i class="fa-solid fa-user icon"></i>
+</div>
+
+<div class="input-box">
+<input type="password" placeholder="Password" required>
+<i class="fa-solid fa-lock icon"></i>
+</div>
+
+<div class="extra">
+<label><input type="checkbox"> Remember me</label>
+<a href="#"><span class="forget">Forgot Password?</span></a>
+</div>
+
+<button class="btn">Login</button>
+<p id="message" style="color:red;"></p>
+
+<p class="signup-text">Don't have an account?
+<a href="signup.html">Sign Up</a>
+</p>
+</div>
+
+<script>
+const btn = document.querySelector(".btn");
+const message = document.getElementById("message");
+
+btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    const email = document.querySelector("input[type='email']").value;
+    const password = document.querySelector("input[type='password']").value;
+
+    const res = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+    });
+
+    const msg = await res.text();
+    message.textContent = msg;
+
+    if (msg === "Login successful") {
+        setTimeout(() => {
+            window.location.href = "/dashboard.html"; // create dashboard.html if you want
+        }, 1000);
+    }
+});
+</script>
+
+</body>
+</html>

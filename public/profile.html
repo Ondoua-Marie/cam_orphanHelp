@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile</title>
+<link rel="stylesheet" href="User.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <nav>
+      <a href="UserD.html">My Dashboard</a>
+      <a href="index.html">Home</a>
+      <a href="profile.html" class="active">My Profile</a>
+      <a href="#">Orphanages</a>
+      <a href="mydonations.html">My Donations</a>
+      <a href="donationF.html" class="donate-btn">Donate</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <header class="topbar">
+      <h1>My Profile</h1>
+    </header>
+
+    <section class="profile-section">
+      <h2>Your Information</h2>
+      <p><strong>Name:</strong> <span id="profileName">-</span></p>
+      <p><strong>Email:</strong> <span id="profileEmail">-</span></p>
+      <p><strong>Phone:</strong> <span id="profilePhone">-</span></p>
+    </section>
+  </main>
+
+</div>
+
+<script>
+// Get userEmail from localStorage
+const userEmail = localStorage.getItem("userEmail");
+
+// Debug: check if email exists
+console.log("Profile load: userEmail =", userEmail);
+
+if (!userEmail) {
+  alert("Please login first");
+  location.href = "/login";
+}
+
+// Fetch user profile from server
+async function loadProfile() {
+  try {
+    const res = await fetch(`/api/user-profile/${userEmail}`);
+    if (!res.ok) {
+      console.error("Failed to fetch profile, status:", res.status);
+      return;
+    }
+
+    const user = await res.json();
+
+    // Fill profile fields
+    document.getElementById("profileName").innerText = user.name || "-";
+    document.getElementById("profileEmail").innerText = user.email || "-";
+    document.getElementById("profilePhone").innerText = user.phone || "-";
+
+  } catch(err) {
+    console.error("Error loading profile:", err);
+  }
+}
+
+// Logout function
+function logout() {
+  localStorage.clear();
+  location.href = "/";
+}
+
+// Load profile when page loads
+loadProfile();
+</script>
+
+</body>
+</html>
+
+

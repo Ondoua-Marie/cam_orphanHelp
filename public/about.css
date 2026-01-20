@@ -1,0 +1,200 @@
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --skyblue:#63b3ff;       
+  --brownred:#b23a2e;     
+  --primary:#0b7dbf;
+  --muted:#6b6f76;
+  --bg:#f7f9fb;
+  --dark:#0a2433;
+}
+
+/* container */
+.container{max-width:1100px;margin:0 auto;padding:1rem}
+
+/* header */
+.site-header{background:#fff;border-bottom:1px solid #e6edf3}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:0.8rem 0}
+.brand{display:flex;align-items:center;gap:0.8rem}
+.logo{height:100px;width:100px;object-fit:contain;border-radius:8px;}
+.brand-text{line-height:1}
+.site-title{font-weight:800;color:var(--dark);font-size:1.05rem}
+.site-sub{font-size:0.8rem;color:var(--skyblue)}
+
+/* nav */
+.main-nav a{margin-left:1rem;text-decoration:none;color:var(--dark);font-weight:500}
+/* Menu items ONLY */
+.main-nav a:not(#nav-donate) {
+  color: var(--brownred);
+}
+.main-nav a:not(#nav-donate):hover {
+  color: #8f2e25;
+}
+/* Navbar Donate button ONLY */
+#nav-donate {
+  background: var(--brownred);
+  color: white !important;
+  padding: 0.75rem 1.8rem;      /* bigger */
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 1.05rem;
+  display: inline-block;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+#nav-donate:hover {
+  transform: scale(1.05);                 
+  box-shadow: 0 10px 28px rgba(178,58,46,0.35);  
+  background-color: #992a20;              
+  transition: all 0.3s ease; 
+}
+
+/* ===== HERO ===== */
+.hero {
+    background: var(--brownred);
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
+}
+
+
+.hero h2 {
+    font-size: 36px;
+}
+
+/* ===== SECTIONS ===== */
+.section {
+    padding: 60px 80px;
+}
+
+.section h3 {
+    color: #8B2C1F;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 28px;
+    letter-spacing: 0.5px;
+}
+
+.section.light {
+    background: #F4FBFF;
+}
+
+/* ===== TWO COLUMN ===== */
+.two-column {
+    display: flex;
+    gap: 30px;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    flex: 1;
+}
+
+/* ===== VALUES ===== */
+.values {
+    display: flex;
+    justify-content: center;   /* CENTER horizontally */
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding: 0;
+    margin-top: 20px;
+}
+
+
+.values li {
+    list-style: none;
+    background: #E6F5FF;
+    padding: 12px 22px;
+    border-radius: 25px;
+    text-align: center;
+}
+
+
+/* ===== TEAM ===== */
+.team {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.member {
+    background: white;
+    padding: 25px;
+    width: 260px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.member img {
+    width: 100px;
+    border-radius: 50%;
+}
+
+.member .role {
+    color: #555;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+blockquote {
+    font-style: italic;
+    color: #333;
+    margin-top: 10px;
+}
+
+/* ===== FOOTER ===== */
+footer {
+    background: #8B2C1F;
+    color: white;
+    text-align: center;
+    padding: 15px;
+}
+
+/* ===== INFO BLOCK (IMAGE + TEXT) ===== */
+.info-block {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    margin-top: 30px;
+}
+
+/* Image styling */
+.info-block img {
+    width: 40%;
+    max-width: 360px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+}
+
+/* Text styling */
+.info-text {
+    flex: 1;
+    text-align: left;
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--dark);
+}
+
+/* Reverse layout (Mission section) */
+.info-block.reverse {
+    flex-direction: row-reverse;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+    .info-block,
+    .info-block.reverse {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .info-text {
+        text-align: center;
+    }
+
+    .info-block img {
+        width: 100%;
+    }
+}
