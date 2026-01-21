@@ -1,3 +1,4 @@
+const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const express = require("express");
@@ -7,34 +8,53 @@ const bodyParser = require("body-parser");
 const path = require("path");
 require("dotenv").config();
 
+// ---------------- ENV CHECK ---------------- //
 if (!process.env.JWT_SECRET) {
-  console.error(" JWT_SECRET is missing in .env");
+  console.error("JWT_SECRET is missing in .env");
   process.exit(1);
 }
 
-
+// ---------------- EXPRESS APP ---------------- //
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-// MySQL connection
-const db = mysql.createConnection({
+// ---------------- MYSQL CONNECTION ---------------- //
+let db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME
 });
 
-db.connect(err => {
-  if (err) return console.log(" MySQL Error:", err.message);
-  console.log(" MySQL Connected");
-});
+// Database reconnect logic
+function handleDisconnect() {
+  db.connect(err => {
+    if (err) {
+      console.log("DB connection failed. Retrying in 2s...", err.message);
+      setTimeout(handleDisconnect, 2000);
+    } else {
+      console.log(" MySQL Connected");
+    }
+  });
 
-// Password rule for signup
+  db.on("error", err => {
+    console.error("DB error", err);
+    if (err.code === "PROTOCOL_CONNECTION_LOST") {
+      handleDisconnect(); // reconnect on disconnect
+    } else {
+      throw err;
+    }
+  });
+}
+
+handleDisconnect();
+
+// ---------------- PASSWORD RULE ---------------- //
 const passwordRule = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
 
-// Admin emails
+// ---------------- ADMINS ---------------- //
 const admins = [
   "marie@gmail.com",
   "charles@gmail.com",
@@ -44,9 +64,7 @@ const admins = [
   "alida@gmail.com"
 ];
 
-
-
-// ================= JWT VERIFY MIDDLEWARE =================
+// ---------------- JWT VERIFY MIDDLEWARE ---------------- //
 function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization;
 
@@ -66,9 +84,7 @@ function verifyToken(req, res, next) {
   });
 }
 
-
 // ---------------- POST ROUTES ---------------- //
-
 // Signup
 app.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
@@ -91,7 +107,6 @@ app.post("/signup", async (req, res) => {
   });
 });
 
-// Login
 // Login
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
@@ -127,32 +142,36 @@ app.post("/login", (req, res) => {
       message: "Login successful",
       redirect: "/UserD.html",
       userName: result[0].name,
+      userAvatar: result[0].avatar || null,
       token
     });
   });
 });
-
 
 // ---------------- GET ROUTES ---------------- //
 app.get("/signup", (req, res) => res.sendFile(path.join(__dirname, "public", "signup.html")));
 app.get("/login", (req, res) => res.sendFile(path.join(__dirname, "public", "login.html")));
 app.get("/donation", (req, res) => res.sendFile(path.join(__dirname, "public", "donationF.html")));
 app.get("/", (req, res) => res.redirect("/signup"));
+app.get("/my-donations", (req, res) => res.sendFile(path.join(__dirname, "public", "mydonations.html")));
 
-// ---------- NEW ROUTE: My Donations Page ----------
-app.get("/my-donations", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "mydonations.html"));
-});
-
-// --------- IMAGE UPLOAD CONFIG ----------
+// ---------------- IMAGE UPLOAD CONFIG ---------------- //
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "public/uploads"),
   filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname)
 });
-const upload = multer({ storage });
+
+// Limit file size to 2MB
+const upload = multer({ storage, limits: { fileSize: 2 * 1024 * 1024 } });
 
 // ---------------- DONATION ROUTE ---------------- //
 app.post("/donate", verifyToken, upload.single("image"), (req, res) => {
+  // SAFETY CHECK
+  if(!req.user || !req.user.email) {
+    return res.status(401).send("Unauthorized: No user info found");
+  }
+
+  const userEmail = req.user.email; // safe now
 
   const {
     donorName,
@@ -167,10 +186,6 @@ app.post("/donate", verifyToken, upload.single("image"), (req, res) => {
     paymentMethod,
     amount
   } = req.body;
-
-  const userEmail = req.user.email; // from JWT
-
-
 
   if (!orphanage) return res.send("You must select an orphanage");
 
@@ -199,7 +214,7 @@ app.post("/donate", verifyToken, upload.single("image"), (req, res) => {
       donationType === "items" ? address : null,
       donationDate || new Date(),
       donationStatus || "pending",
-      userEmail // <-- save logged-in user's email
+      userEmail
     ], (err) => {
       if (err) {
         console.error(err);
@@ -210,21 +225,9 @@ app.post("/donate", verifyToken, upload.single("image"), (req, res) => {
   });
 });
 
-// ---------------- MY DONATIONS ROUTE ---------------- //
-app.get("/api/my-donations/:email", (req, res) => {
-  const { email } = req.params;
 
-  db.query(
-    "SELECT * FROM donations WHERE userEmail = ? ORDER BY donationDate DESC",
-    [email],
-    (err, results) => {
-      if (err) return res.status(500).json({ error: "Database error" });
-      res.json(results);
-    }
-  );
-});
 
-// ---------------- ADMIN API ---------------- //
+/ ---------------- ADMIN API ---------------- //
 // Get all donations
 app.get("/api/donations", (req, res) => {
   db.query("SELECT * FROM donations ORDER BY id DESC", (err, results) => {
@@ -303,34 +306,37 @@ app.delete("/api/admin/relay/:id", (req, res) => {
 });
 
 
+// ---------------- MY DONATIONS ROUTE ---------------- //
+app.get("/api/my-donations/:email", (req, res) => {
+  const { email } = req.params;
 
-// ================= PROFILE AVATAR UPLOAD =================
-const avatarStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "public/upload-proof")); // save in public/upload-proof
-  },
-  filename: function (req, file, cb) {
-    // Save file as userEmail + extension
-    const ext = path.extname(file.originalname);
-    cb(null, file.originalname);
-  }
+  if(!email) return res.status(400).json({ error: "Email is required" });
+
+  db.query(
+    "SELECT * FROM donations WHERE userEmail = ? ORDER BY donationDate DESC",
+    [email],
+    (err, results) => {
+      if (err) return res.status(500).json({ error: "Database error" });
+      res.json(results);
+    }
+  );
 });
 
-const avatarUpload = multer({ storage: avatarStorage });
 
-app.post("/api/upload-avatar", avatarUpload.single("avatar"), (req, res) => {
-  if(!req.file) return res.status(400).json({ error: "No file uploaded" });
-  const filePath = "/upload-proof/" + req.file.filename; // path to serve in frontend
-  
-  // Here you can save filePath in your database under user's profile if you want
-  // Example: UPDATE users SET avatar = filePath WHERE email = req.body.email
+// ---------------- CRASH PROTECTION ---------------- //
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+});
 
-  res.json({ avatarPath: filePath });
+process.on("unhandledRejection", (err) => {
+  console.error("Unhandled Rejection:", err);
 });
 
 // ---------------- SERVER START ---------------- //
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(" Server running on port " + PORT));
+
+
 
 
 

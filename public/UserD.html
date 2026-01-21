@@ -23,9 +23,9 @@
   object-fit: cover;
   margin-bottom: 15px;
 }
+/* Removed file input styling since user cannot change avatar */
 #profileSection input[type="file"] {
-  display: block;
-  margin-top: 10px;
+  display: none;
 }
 </style>
 </head>
@@ -40,7 +40,6 @@
 <a href="index.html">Home</a>
 <a href="#" id="profileLink">My Profile</a>
 <a href="orphanpage.html">Orphanages</a>
-<!-- Removed My Donations link -->
 <a href="donationF.html" class="donate-btn">Donate</a>
 <a href="#" onclick="logout()">Logout</a>
 </nav>
@@ -54,7 +53,8 @@
 <h1 id="welcomeUser"></h1>
 
 <div class="user-info">
-<img src="Serge.png" class="user-avatar" id="headerAvatar">
+<!-- Default human icon -->
+<img src="/default-avatar.jpg" class="user-avatar" id="headerAvatar">
 <div>
 <span id="userNameLabel"></span><br>
 <small class="verified">Verified</small>
@@ -88,7 +88,7 @@
 
 <!-- TABLE -->
 <section class="table-section" id="dashboardTable">
-<h2>My Donations</h2> <!-- Changed from Recent Donations to My Donations -->
+<h2>My Donations</h2>
 <table>
 <thead>
 <tr>
@@ -107,9 +107,12 @@
 <!-- PROFILE SECTION -->
 <section id="profileSection">
 <h2>My Profile</h2>
-<img src="Serge.png" id="profileAvatar">
-<label for="avatarUpload">Change Profile Picture:</label>
-<input type="file" id="avatarUpload" accept="image/*" onchange="uploadAvatarToFolder('upload-proof')">
+<!-- Default human icon for profile -->
+<img src="/default-avatar.jpg" id="profileAvatar">
+
+<!-- Removed file input for avatar -->
+<!-- <label for="avatarUpload">Change Profile Picture:</label>
+<input type="file" id="avatarUpload" accept="image/*" onchange="uploadAvatarToFolder('upload-proof')"> -->
 
 <p><strong>Name:</strong> <span id="profileName"></span></p>
 <p><strong>Email:</strong> <span id="profileEmail"></span></p>
@@ -123,12 +126,9 @@
 const userName = localStorage.getItem("userName");
 const userEmail = localStorage.getItem("userEmail");
 
-// PROFILE PICTURE PERSISTENCE
-const savedAvatar = localStorage.getItem("userAvatar");
-if(savedAvatar){
-  document.getElementById("profileAvatar").src = savedAvatar;
-  document.getElementById("headerAvatar").src = savedAvatar;
-}
+// Always show default human icon
+document.getElementById("profileAvatar").src = "/default-avatar.png";
+document.getElementById("headerAvatar").src = "/default-avatar.png";
 
 if(!userEmail){
   alert("Please login first");
@@ -236,46 +236,6 @@ document.getElementById("dashboardLink").onclick = ()=>{
   profileSection.style.display = "none";
 };
 
-// CHANGE PROFILE AVATAR
-function uploadAvatarToFolder(folder){
-  const input = document.getElementById("avatarUpload");
-  const file = input.files[0];
-  if(!file) return;
-
-  // Show local preview immediately
-  const reader = new FileReader();
-  reader.onload = function(e){
-    document.getElementById("profileAvatar").src = e.target.result;
-    document.getElementById("headerAvatar").src = e.target.result;
-    localStorage.setItem("userAvatar", e.target.result);
-  };
-  reader.readAsDataURL(file);
-
-  // Upload to server and specify destination folder
-  const form = new FormData();
-  form.append("avatar", file);
-  form.append("folder", folder);
-
-  fetch('/api/upload-avatar', {
-    method: 'POST',
-    body: form
-  })
-  .then(res => res.json())
-  .then(data => {
-    if(data && data.url){
-      // Use server URL if provided
-      document.getElementById("profileAvatar").src = data.url;
-      document.getElementById("headerAvatar").src = data.url;
-      localStorage.setItem("userAvatar", data.url);
-      alert('Profile image uploaded');
-    } else {
-      console.log('Upload failed', data);
-      alert('Upload failed');
-    }
-  })
-  .catch(()=> alert('Upload error'));
-}
-
 // AUTO REFRESH
 loadDonations();
 setInterval(loadDonations, 5000);
@@ -283,6 +243,7 @@ setInterval(loadDonations, 5000);
 
 </body>
 </html>
+
 
 
 

@@ -74,6 +74,10 @@ btn.addEventListener("click", async (e) => {
             if (data.userName) {
                 localStorage.setItem("userName", data.userName);
                 localStorage.setItem("userEmail", email); // also store email
+
+                // Save avatar
+                // fallback to default if avatar is null/empty
+                localStorage.setItem("userAvatar", data.userAvatar || "/upload-proof/Serge.png");
             }
 
             // ✅ Save JWT token
@@ -96,4 +100,5 @@ btn.addEventListener("click", async (e) => {
 
 </body>
 </html>
+
 
