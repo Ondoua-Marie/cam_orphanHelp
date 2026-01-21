@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="Admin.css">
+</head>
+<body>
+
+<!-- Sidebar -->
+<i class="fa fa-bars hamburger" onclick="toggleSidebar()" aria-label="Toggle sidebar"></i>
+<div class="sidebar" id="sidebar">
+    <div>
+        <div class="logo-container">
+            <div class="logo-bg">
+                <img src="camlev.png" alt="website logo" class="logo">
+            </div>
+            <span class="logo-text">Admin</span>
+        </div>
+
+        <a href="#" class="active" onclick="showSection('dashboard')"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+        <a href="#" onclick="showSection('donations')"><i class="fa-solid fa-gift"></i> Donations</a>
+        <a href="#" onclick="showSection('donors')"><i class="fa-solid fa-users"></i> Donors</a>
+        <a href="#" onclick="showSection('settings')"><i class="fa-solid fa-gear"></i> Settings</a>
+    </div>
+    <a href="#" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+</div>
+
+<!-- Main Content -->
+<div class="main">
+
+    <!-- Dashboard Cards -->
+    <section id="dashboard">
+        <h1>Welcome Admin</h1>
+        <div class="cards">
+            <div class="card">
+                <i class="fa-solid fa-money-bill-wave"></i>
+                <h3>Total Amount Donated</h3>
+                <p id="totalAmount">0 FCFA</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <h3>Total Items Donated</h3>
+                <p id="totalItems">0</p>
+            </div>
+            <div class="card">
+                <i class="fa fa-university"></i>
+                <h3>Orphanages</h3>
+                <p id="orphanages">0</p>
+            </div>
+            <div class="card">
+                <i class="fa fa-clock"></i>
+                <h3>Pending Donations</h3>
+                <p id="pendingDonations">0</p>
+            </div>
+            <div class="card">
+                <i class="fa fa-users"></i>
+                <h3>Registered Donors</h3>
+                <p id="registeredDonors">0</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donations Table -->
+    <section id="donations" style="display:none;">
+        <h1>All Donations</h1>
+        <table id="donationsTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Donor</th>
+                    <th>Orphanage</th>
+                    <th>Amount</th>
+                    <th>Items</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <!-- Donors Table -->
+    <section id="donors" style="display:none;">
+        <h1>All Donors</h1>
+        <table id="donorsTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Total Donations</th>
+                    <th>Total Items</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <!-- Settings -->
+    <section id="settings" style="display:none;">
+        <h1>Settings</h1>
+        <h2>Change Admin Password</h2>
+        <form id="changePasswordForm">
+            <input type="password" id="oldPassword" placeholder="Old Password" required><br><br>
+            <input type="password" id="newPassword" placeholder="New Password" required><br><br>
+            <button type="submit">Change Password</button>
+        </form>
+    </section>
+
+</div>
+
+<script>
+// ---------------- Sidebar ----------------
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('show');
+}
+
+function showSection(sectionId) {
+    const sections = ['dashboard','donations','donors','settings'];
+    sections.forEach(s => document.getElementById(s).style.display = 'none');
+    document.getElementById(sectionId).style.display = 'block';
+
+    // Set active class
+    const links = document.querySelectorAll('.sidebar a');
+    links.forEach(l => l.classList.remove('active'));
+    links.forEach(l => { if(l.getAttribute('onclick').includes(sectionId)) l.classList.add('active'); });
+
+    // Load dynamic data
+    if(sectionId === 'dashboard') loadDashboard();
+    if(sectionId === 'donations') loadDonations();
+    if(sectionId === 'donors') loadDonors();
+}
+
+// ---------------- Dashboard Cards ----------------
+async function loadDashboard() {
+    const res = await fetch("/admin/dashboard");
+    const data = await res.json();
+    document.getElementById("totalAmount").innerText = data.totalAmount + " FCFA";
+    document.getElementById("totalItems").innerText = data.totalItems;
+    document.getElementById("orphanages").innerText = data.orphanages;
+    document.getElementById("pendingDonations").innerText = data.pendingDonations;
+    document.getElementById("registeredDonors").innerText = data.registeredDonors;
+}
+
+// ---------------- Donations Table ----------------
+async function loadDonations() {
+    const res = await fetch("/admin/donations");
+    const donations = await res.json();
+    const tbody = document.querySelector("#donationsTable tbody");
+    tbody.innerHTML = "";
+    donations.forEach(d => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${d.id}</td>
+            <td>${d.donor}</td>
+            <td>${d.orphanage}</td>
+            <td>${d.amount}</td>
+            <td>${d.items}</td>
+            <td>${d.status}</td>
+            <td>${d.status === 'pending' ? `<button onclick="confirmDonation(${d.id})">Confirm</button>` : ''}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+async function confirmDonation(id) {
+    const res = await fetch("/admin/confirm-donation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ donationId: id })
+    });
+    alert(await res.text());
+    loadDonations();
+    loadDashboard(); // update cards after confirm
+}
+
+// ---------------- Donors Table ----------------
+async function loadDonors() {
+    const res = await fetch("/admin/donors");
+    const donors = await res.json();
+    const tbody = document.querySelector("#donorsTable tbody");
+    tbody.innerHTML = "";
+    donors.forEach(d => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${d.id}</td>
+            <td>${d.name}</td>
+            <td>${d.email}</td>
+            <td>${d.totalAmount}</td>
+            <td>${d.totalItems}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// ---------------- Settings Form ----------------
+document.getElementById("changePasswordForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const oldPassword = document.getElementById("oldPassword").value;
+    const newPassword = document.getElementById("newPassword").value;
+
+    const res = await fetch("/admin/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ oldPassword, newPassword })
+    });
+    alert(await res.text());
+});
+
+// ---------------- Initial Load ----------------
+showSection('dashboard');
+</script>
+
+</body>
+</html>
+      

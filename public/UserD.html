@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Dashboard</title>
+<link rel="stylesheet" href="User.css">
+<style>
+/* PROFILE PAGE STYLE */
+#profileSection {
+  display: none;
+  margin-top: 20px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  max-width: 600px;
+}
+#profileSection img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+/* Removed file input styling since user cannot change avatar */
+#profileSection input[type="file"] {
+  display: none;
+}
+</style>
+</head>
+<body>
+
+<div class="dashboard">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+<nav>
+<a href="#" class="active" id="dashboardLink">My Dashboard</a>
+<a href="index.html">Home</a>
+<a href="#" id="profileLink">My Profile</a>
+<a href="orphanpage.html">Orphanages</a>
+<a href="donationF.html" class="donate-btn">Donate</a>
+<a href="#" onclick="logout()">Logout</a>
+</nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- HEADER -->
+<header class="topbar">
+<h1 id="welcomeUser"></h1>
+
+<div class="user-info">
+<!-- Default human icon -->
+<img src="/default-avatar.jpg" class="user-avatar" id="headerAvatar">
+<div>
+<span id="userNameLabel"></span><br>
+<small class="verified">Verified</small>
+</div>
+</div>
+</header>
+
+<!-- CARDS -->
+<section class="cards" id="dashboardCards">
+<div class="card">
+<h3>Monetary Donations</h3>
+<p id="totalMoney">0 FCFA</p>
+</div>
+
+<div class="card">
+<h3>Physical Donations</h3>
+<p id="totalItems">0 Items</p>
+</div>
+
+<div class="card">
+<h3>Last Donation</h3>
+<p id="lastDonationType">-</p>
+<small id="lastDonationDetails">-</small>
+</div>
+
+<div class="card">
+<h3>Supported Orphanages</h3>
+<p id="supportedOrphanages">0</p>
+</div>
+</section>
+
+<!-- TABLE -->
+<section class="table-section" id="dashboardTable">
+<h2>My Donations</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Orphanage</th>
+<th>Donation Type</th>
+<th>Details</th>
+<th>Status</th>
+<th>Proof</th>
+</tr>
+</thead>
+<tbody id="donationTableBody"></tbody>
+</table>
+</section>
+
+<!-- PROFILE SECTION -->
+<section id="profileSection">
+<h2>My Profile</h2>
+<!-- Default human icon for profile -->
+<img src="/default-avatar.jpg" id="profileAvatar">
+
+<!-- Removed file input for avatar -->
+<!-- <label for="avatarUpload">Change Profile Picture:</label>
+<input type="file" id="avatarUpload" accept="image/*" onchange="uploadAvatarToFolder('upload-proof')"> -->
+
+<p><strong>Name:</strong> <span id="profileName"></span></p>
+<p><strong>Email:</strong> <span id="profileEmail"></span></p>
+</section>
+
+</main>
+</div>
+
+<script>
+// LOGIN INFO
+const userName = localStorage.getItem("userName");
+const userEmail = localStorage.getItem("userEmail");
+
+// Always show default human icon
+document.getElementById("profileAvatar").src = "/default-avatar.png";
+document.getElementById("headerAvatar").src = "/default-avatar.png";
+
+if(!userEmail){
+  alert("Please login first");
+  location.href="/login";
+}
+
+document.getElementById("welcomeUser").innerText = "Welcome, " + userName + " 👋";
+document.getElementById("userNameLabel").innerText = userName;
+
+// LOAD DONATIONS
+async function loadDonations(){
+  const res = await fetch(`/api/my-donations/${userEmail}`);
+  const donations = await res.json();
+
+  let money = 0, items = 0;
+  let orphanages = new Set();
+  const tbody = document.getElementById("donationTableBody");
+  tbody.innerHTML = "";
+
+  donations.forEach(d=>{
+    if(["received","collected"].includes(d.donationStatus)){
+      if(d.donationType==="money") money += Number(d.amount||0);
+      else items++;
+    }
+
+    orphanages.add(d.orphanage);
+
+    tbody.innerHTML += `
+    <tr>
+      <td>${new Date(d.donationDate).toLocaleDateString()}</td>
+      <td>${d.orphanage}</td>
+      <td>${d.donationType==="money"?d.paymentMethod:"Physical Donation"}</td>
+      <td>${d.donationType==="money"?d.amount+" FCFA":d.description}</td>
+      <td class="${d.donationStatus}">${d.donationStatus}</td>
+      <td>
+      ${d.donationType==="money" && d.donationStatus==="pending"
+        ? `<button onclick="uploadProof(${d.id})">Upload</button>`
+        : "-"}
+      </td>
+    </tr>`;
+  });
+
+  document.getElementById("totalMoney").innerText = money + " FCFA";
+  document.getElementById("totalItems").innerText = items + " Items";
+  document.getElementById("supportedOrphanages").innerText = orphanages.size;
+
+  if(donations[0]){
+    document.getElementById("lastDonationType").innerText =
+      donations[0].donationType==="money"?donations[0].paymentMethod:"Physical Donation";
+    document.getElementById("lastDonationDetails").innerText =
+      donations[0].donationType==="money"?donations[0].amount+" FCFA":donations[0].description;
+  }
+}
+
+// UPLOAD PROOF
+function uploadProof(id){
+  const input = document.createElement("input");
+  input.type="file";
+  input.accept="image/*";
+
+  input.onchange = async ()=>{
+    const file = input.files[0];
+    if(!file) return;
+
+    const form = new FormData();
+    form.append("avatar", file);
+    form.append("folder", "upload-proof");
+
+    await fetch('/api/upload-avatar', {
+      method: 'POST',
+      body: form
+    });
+    alert("Proof uploaded");
+    loadDonations();
+  };
+
+  input.click();
+}
+
+// LOGOUT
+function logout(){
+  localStorage.clear();
+  location.href="/login";
+}
+
+// PROFILE VIEW
+const profileLink = document.getElementById("profileLink");
+const dashboardCards = document.getElementById("dashboardCards");
+const dashboardTable = document.getElementById("dashboardTable");
+const profileSection = document.getElementById("profileSection");
+
+profileLink.onclick = ()=>{
+  dashboardCards.style.display = "none";
+  dashboardTable.style.display = "none";
+  profileSection.style.display = "block";
+
+  document.getElementById("profileName").innerText = userName;
+  document.getElementById("profileEmail").innerText = userEmail;
+};
+
+// DASHBOARD VIEW
+document.getElementById("dashboardLink").onclick = ()=>{
+  dashboardCards.style.display = "flex";
+  dashboardTable.style.display = "block";
+  profileSection.style.display = "none";
+};
+
+// AUTO REFRESH
+loadDonations();
+setInterval(loadDonations, 5000);
+</script>
+
+</body>
+</html>
+
+
+
+

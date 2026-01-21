@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sign Up</title>
+<link rel="stylesheet" href="stylesign.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<div class="container">
+<h2>Create Account</h2>
+<form id="signupForm">
+
+<input type="text" id="name" placeholder="Full Name" required><br><br>
+<input type="email" id="email" placeholder="Email" required><br><br>
+
+<div class="password-box">
+<input type="password" id="password" placeholder="Password" required>
+<span class="eye"><i id="eye1" class="fa-solid fa-eye-slash" onclick="togglePassword()"></i></span>
+</div><br><br>
+
+<div class="password-box">
+<input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+<span class="eye"><i id="eye2" class="fa-solid fa-eye-slash" onclick="toggleConfirm()"></i></span>
+</div><br>
+
+<button type="submit">Sign Up</button><br><br>
+
+<p id="signupMessage" style="color:red;"></p>
+
+<p class="login-text">
+Already have an account?  
+<a href="login.html">Log In</a>
+</p>
+</form>
+</div>
+
+
+<script>
+const form = document.getElementById('signupForm');
+const signupMessage = document.getElementById('signupMessage');
+
+form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    if (password !== confirmPassword) {
+        signupMessage.textContent = "Passwords do not match!";
+        return;
+    }
+
+    try {
+        const response = await fetch("/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, password })
+        });
+
+        const data = { message: await response.text() }; // handle JSON or fallback
+        
+        signupMessage.textContent = data.message;
+
+        if (data.message === "Account created successfully") {
+            form.reset();
+            hideEyes();
+            // empty signupMessage after successful signup after 5 seconds
+            setTimeout(() => {
+                signupMessage.textContent = "";
+            }, 5000);
+        }
+
+    } catch (err) {
+        signupMessage.textContent = "Server error. Please try again.";
+        console.error(err);
+    }
+});
+
+// Password eye toggle logic (same as before)
+const passwordInput = document.getElementById("password");
+const confirmInput = document.getElementById("confirmPassword");
+const eye1 = document.getElementById("eye1");
+const eye2 = document.getElementById("eye2");
+
+passwordInput.addEventListener("input", () => {
+    eye1.parentElement.style.display = passwordInput.value.length > 0 ? "inline-block" : "none";
+});
+
+confirmInput.addEventListener("input", () => {
+    eye2.parentElement.style.display = confirmInput.value.length > 0 ? "inline-block" : "none";
+});
+
+function hideEyes(){
+    eye1.parentElement.style.display = "none";
+    eye2.parentElement.style.display = "none";
+    passwordInput.type = "password";
+    confirmInput.type = "password";
+    eye1.classList.replace("fa-eye","fa-eye-slash");
+    eye2.classList.replace("fa-eye","fa-eye-slash");
+}
+
+function togglePassword(){
+    passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+    eye1.classList.toggle("fa-eye");
+    eye1.classList.toggle("fa-eye-slash");
+}
+
+function toggleConfirm(){
+    confirmInput.type = confirmInput.type === "password" ? "text" : "password";
+    eye2.classList.toggle("fa-eye");
+    eye2.classList.toggle("fa-eye-slash");
+}
+window.onload = () => {
+    form.reset();
+    hideEyes();
+};
+
+
+hideEyes();
+</script>
+</body>
+</html>
