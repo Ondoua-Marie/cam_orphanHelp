@@ -1,59 +1,43 @@
-CREATE DATABASE cam_orphan;
-
+CREATE DATABASE IF NOT EXISTS cam_orphan;
 USE cam_orphan;
 
--- ------------------ User TABLE ------------------
-
-CREATE TABLE users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(100),
-  email VARCHAR(100) UNIQUE,
-  password VARCHAR(255)
+-- Create donations table
+CREATE TABLE IF NOT EXISTS donations (
+  id int NOT NULL AUTO_INCREMENT,
+  donorName varchar(255) NOT NULL,
+  phone varchar(50) NOT NULL,
+  orphanage varchar(255) DEFAULT NULL,
+  relayPoint varchar(255) DEFAULT NULL,
+  donationType varchar(50) DEFAULT NULL,
+  paymentMethod varchar(50) DEFAULT NULL,
+  amount decimal(12,2) DEFAULT NULL,
+  imagePath varchar(255) DEFAULT NULL,
+  description text,
+  address text,
+  donationDate datetime DEFAULT NULL,
+  donationStatus varchar(50) DEFAULT 'Pending',
+  created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  userEmail varchar(255) DEFAULT NULL,
+  PRIMARY KEY (id)
 );
 
--- ------------------ Donation TABLE ------------------
-
-CREATE TABLE donations (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  donorName VARCHAR(255) NOT NULL,
-  phone VARCHAR(50) NOT NULL,
-  orphanage VARCHAR(255) NOT NULL,
-  relayPoint VARCHAR(255) NOT NULL,
-  goodsType VARCHAR(255) NOT NULL,
-  imagePath VARCHAR(255) NOT NULL,
-  description TEXT NOT NULL,
-  address TEXT NOT NULL,
-  pickupFrom DATE NOT NULL,
-  pickupStatus VARCHAR(50) DEFAULT 'Pending',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-
-ALTER TABLE donations
-MODIFY orphanage VARCHAR(255) NULL,
-MODIFY relayPoint VARCHAR(255) NULL,
-MODIFY address TEXT NULL,
-MODIFY description TEXT NULL;
-
--- ------------------ RELAY POINTS TABLE ------------------
+-- Create relay_points table
 CREATE TABLE IF NOT EXISTS relay_points (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    location VARCHAR(255) NOT NULL,
-    manager VARCHAR(255),
-    phone VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  id int NOT NULL AUTO_INCREMENT,
+  location varchar(255) NOT NULL,
+  manager varchar(255) DEFAULT NULL,
+  phone varchar(50) DEFAULT NULL,
+  created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
 );
 
--- Example relay points
-INSERT INTO relay_points (location, manager, phone)
-VALUES
-('Carrefour des Soeur Messamendongo', 'Alice', '699111222'),
-('Santa Lucia Mendong', 'Bob', '699333444'),
-('Tradex Simbock', 'Charles', '699555666'),
-('DOVV Simbock', 'Diana', '699777888'),
-('Tradex Olembe', 'Eve', '699999000'),
-('Tradex Emana', 'Frank', '699000111'),
-('Neptune Nkozoa', 'Grace', '699222333');
-
-
-
+-- Create users table
+CREATE TABLE IF NOT EXISTS users (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(255) NOT NULL,
+  email varchar(255) NOT NULL,
+  password varchar(255) NOT NULL,
+  created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY email (email)
+);
